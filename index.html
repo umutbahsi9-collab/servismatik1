@@ -7,36 +7,6 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Aras Servis">
-<link rel="manifest" id="pwa-manifest">
-<script>
-(function(){
-  try{
-    var base=location.href.replace(/[?#].*$/,'').replace(/\/index\.html$/,'/');
-    if(base.slice(-1)!=='/')base+='/';
-    var m=JSON.stringify({
-      name:'Aras İklimlendirme Servis',short_name:'Aras Servis',
-      description:'Aras İklimlendirme saha servis yönetim uygulaması',
-      start_url:base+'index.html',scope:base,display:'standalone',
-      orientation:'portrait',background_color:'#1565C0',theme_color:'#1565C0',lang:'tr',
-      icons:[
-        {src:base+'icons/icon-72.png',sizes:'72x72',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-96.png',sizes:'96x96',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-128.png',sizes:'128x128',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-144.png',sizes:'144x144',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-152.png',sizes:'152x152',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-192.png',sizes:'192x192',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-384.png',sizes:'384x384',type:'image/png',purpose:'any maskable'},
-        {src:base+'icons/icon-512.png',sizes:'512x512',type:'image/png',purpose:'any maskable'}
-      ],
-      shortcuts:[{name:'Yeni Servis',short_name:'Servis',
-        url:base+'index.html#s-srv-new',
-        icons:[{src:base+'icons/icon-96.png',sizes:'96x96'}]}]
-    });
-    var b=new Blob([m],{type:'application/manifest+json'});
-    document.getElementById('pwa-manifest').href=URL.createObjectURL(b);
-  }catch(e){document.getElementById('pwa-manifest').href='manifest.json';}
-})();
-</script>
 <link rel="apple-touch-icon" href="icons/icon-192.png">
 <title>Aras İklimlendirme</title>
 <style>
