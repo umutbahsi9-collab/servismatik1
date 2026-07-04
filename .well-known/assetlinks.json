@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.arasiklimlendirme.servis",
+    "sha256_cert_fingerprints": ["EE:B1:FC:CD:1E:D1:8E:49:02:E7:16:D9:87:64:AF:DD:BE:0D:B5:2F:88:D9:12:53:16:BA:FC:F0:A1:AA:6F:F7"]
+  }
+}]
