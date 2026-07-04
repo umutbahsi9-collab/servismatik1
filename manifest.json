@@ -2,8 +2,8 @@
   "name": "Aras İklimlendirme Servis",
   "short_name": "Aras Servis",
   "description": "Aras İklimlendirme saha servis yönetim uygulaması",
-  "start_url": "/servismatik1/index.html",
-  "scope": "/servismatik1/",
+  "start_url": "/servismatik/index.html",
+  "scope": "/servismatik/",
   "display": "standalone",
   "orientation": "portrait",
   "background_color": "#1565C0",
@@ -27,7 +27,7 @@
       "name": "Yeni Servis",
       "short_name": "Servis",
       "description": "Yeni servis kaydı oluştur",
-      "url": "/servismatik1/index.html#s-srv-new",
+      "url": "/servismatik/index.html#s-srv-new",
       "icons": [{ "src": "icons/icon-96.png", "sizes": "96x96" }]
     }
   ]
