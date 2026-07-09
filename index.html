@@ -703,7 +703,7 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
         <div class="frow">
           <label>Durum</label>
           <select id="n-status">
-            <option>Bekliyor</option><option>Devam Ediyor</option><option>Tamamlandı</option>
+            <option>Bekliyor</option><option>Devam Ediyor</option>
           </select>
         </div>
       </div>
@@ -721,26 +721,28 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
             <option>Fan Coil</option><option>Isı Pompası</option>
           </select>
         </div>
-        <div class="frow2">
-          <div class="frow">
-            <label>Marka</label>
-            <select id="n-dbrand">
-              <option>Arçelik</option><option>Beko</option><option>Daikin</option>
-              <option>Fakir</option><option>General</option><option>Gree</option>
-              <option>Haier</option><option>Hantech</option><option>Hitachi</option>
-              <option>Jeriyan</option><option>LG</option><option>Midea</option>
-              <option>Mitsubishi</option><option>Samsung</option><option>Sigma</option>
-              <option>Toshiba</option><option>Vestel</option><option>Diğer</option>
-            </select>
-          </div>
-          <div class="frow"><label>Model</label><input id="n-dmodel" type="text" placeholder="Model no"></div>
+        <div class="frow">
+          <label>Marka</label>
+          <select id="n-dbrand">
+            <option>Arçelik</option><option>Beko</option><option>Daikin</option>
+            <option>Fakir</option><option>General</option><option>Gree</option>
+            <option>Haier</option><option>Hantech</option><option>Hitachi</option>
+            <option>Jeriyan</option><option>LG</option><option>Midea</option>
+            <option>Mitsubishi</option><option>Samsung</option><option>Sigma</option>
+            <option>Toshiba</option><option>Vestel</option><option>Diğer</option>
+          </select>
         </div>
-        <div class="frow2">
-          <div class="frow">
-            <label>Kapasite</label>
-            <input id="n-dcap" type="text" placeholder="Örn: 12.000 BTU">
-          </div>
-          <div class="frow"><label>Kuruluş Yılı</label><input id="n-dyear" type="number" placeholder="2020" min="2000" max="2030"></div>
+        <div class="frow">
+          <label>Kapasite</label>
+          <input id="n-dcap" type="text" placeholder="Örn: 12.000 BTU">
+        </div>
+        <div class="frow">
+          <label>📷 Cihaz Fotoğrafı</label>
+          <label style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;padding:10px 14px;cursor:pointer;font-size:13px;color:var(--txt2);font-weight:600;">
+            📁 Fotoğraf Seç / Çek
+            <input type="file" id="n-device-photo" accept="image/*" style="display:none" onchange="previewDevicePhoto(this)">
+          </label>
+          <div id="n-device-photo-preview" style="margin-top:8px;"></div>
         </div>
       </div>
 
@@ -982,7 +984,7 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
         <textarea id="cp-action" rows="3" placeholder="Yapılan müdahale ve işlem detaylarını yazın..." style="width:100%;background:var(--surf);border:1px solid var(--border);border-radius:10px;padding:10px;font-size:13px;font-family:inherit;resize:none;outline:none;box-sizing:border-box;"></textarea>
       </div>
       <div class="fsec" style="margin-bottom:10px">
-        <div class="fsec-t">📷 Servis Fotoğrafları <span class="req">*</span> <span style="font-size:10px;color:var(--txt3);font-weight:400;">(En az 1 fotoğraf)</span></div>
+        <div class="fsec-t">📷 Servis Sonrası Fotoğraflar <span class="req">*</span> <span style="font-size:10px;color:var(--txt3);font-weight:400;">(En az 1 fotoğraf)</span></div>
         <label style="display:flex;align-items:center;gap:8px;background:var(--bg);border:1.5px dashed var(--border);border-radius:10px;padding:12px 14px;cursor:pointer;font-size:13px;color:var(--txt2);font-weight:600;">
           📁 Fotoğraf Seç / Çek
           <input type="file" id="cp-photos" accept="image/*" multiple style="display:none" onchange="previewCompPhotos(this)">
@@ -1039,8 +1041,13 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
           </div>
         </div>
       </div>
+      <div class="fsec" id="cp-teslim-sec" style="margin-bottom:10px;display:none">
+        <div class="fsec-t">👥 Teslim Alan Kişi</div>
+        <div class="frow"><label>Ad Soyad</label><input id="cp-teslim-name" type="text" placeholder="Teslim alan kişi adı"></div>
+        <div class="frow"><label>Telefon</label><input id="cp-teslim-phone" type="tel" placeholder="0XXX XXX XX XX"></div>
+      </div>
       <div class="fsec" style="margin-bottom:10px">
-        <div class="fsec-t">✍️ Müşteri İmzası</div>
+        <div class="fsec-t" id="sig-section-label">✍️ Müşteri İmzası</div>
         <div style="border:1.5px solid var(--border);border-radius:10px;overflow:hidden;position:relative;background:#fff;">
           <canvas id="sig-canvas" width="700" height="160" style="width:100%;height:160px;touch-action:none;display:block;cursor:crosshair;"></canvas>
           <div id="sig-hint" style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:13px;color:#bbb;pointer-events:none;">✍️ Parmakla imzalayın</div>
@@ -1084,6 +1091,7 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
     <button class="back" onclick="go('s-srv-list')">←</button>
     <h2>Servis Detayı</h2>
     <div class="hbadge" id="det-id-badge">#SRV-000</div>
+    <button onclick="openShareModal()" style="background:rgba(21,101,192,.12);border:none;color:var(--blue);border-radius:8px;padding:6px 10px;font-size:13px;cursor:pointer;">📤</button>
   </div>
   <div class="scroll">
     <div id="det-content" style="padding:12px 14px 20px"></div>
@@ -1226,6 +1234,46 @@ html,body{height:100%;font-family:'Segoe UI',system-ui,sans-serif;background:#0D
   </div>
 </div>
 
+
+<!-- ══════════════ m-teslim ══════════════ -->
+<div class="modal-overlay" id="m-teslim">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👤 İşi Teslim Alan Kim?</div>
+    <div class="modal-body" style="padding-top:8px;display:flex;flex-direction:column;gap:10px;">
+      <button class="btn btn-p" onclick="selectTeslimat('musteri')">👤 Müşteri Kendisi</button>
+      <button class="btn" style="background:var(--surf);border:1.5px solid var(--border);color:var(--txt);" onclick="selectTeslimat('diger')">👥 Başka Biri</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ m-edit-section ══════════════ -->
+<div class="modal-overlay" id="m-edit-section">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title" id="edit-section-title">Düzenle</div>
+    <div class="modal-body" style="padding-top:8px" id="edit-section-body"></div>
+    <div style="padding:0 18px 8px;display:flex;flex-direction:column;gap:8px;">
+      <button class="btn btn-p" onclick="saveEditSection()">💾 Kaydet</button>
+      <button class="btn" style="background:var(--bg);color:var(--txt3);border:1px solid var(--border);" onclick="document.getElementById('m-edit-section').classList.remove('open')">İptal</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════ m-share ══════════════ -->
+<div class="modal-overlay" id="m-share">
+  <div class="modal-box">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📤 Servisi Paylaş</div>
+    <div class="modal-body" style="padding-top:8px">
+      <p style="font-size:12px;color:var(--txt2);margin-bottom:12px">Servis formunu WhatsApp ile teknisyene gönderin.</p>
+      <div class="frow"><label>Teknisyen Adı Soyadı</label><input id="share-name" type="text" placeholder="Ad Soyad"></div>
+      <div class="frow"><label>Teknisyen Telefonu</label><input id="share-phone" type="tel" placeholder="0XXX XXX XX XX"></div>
+      <button class="btn btn-p" onclick="sendShareWA()" style="margin-top:8px">📱 WhatsApp ile Gönder</button>
+      <button class="btn" style="background:var(--bg);color:var(--txt3);border:1px solid var(--border);margin-top:6px" onclick="document.getElementById('m-share').classList.remove('open')">İptal</button>
+    </div>
+  </div>
+</div>
 
 </div><!-- /phone -->
 </div><!-- /app -->
@@ -1605,11 +1653,14 @@ function initNewSrv(){
   document.getElementById('n-date').value=today;
   // clear text/number fields
   ['n-cname','n-cphone','n-cemail','n-caddr',
-   'n-dmodel','n-dserial','n-dyear','n-dcap','n-fault','n-action','n-notes',
+   'n-dserial','n-dcap','n-fault','n-action','n-notes',
    'n-labor','n-material','n-kdv','n-discount'].forEach(id=>{
     const el=document.getElementById(id);
     if(el){el.value=id==='n-kdv'?'20':'';}
   });
+  window._devicePhotoB64=null;
+  const devPhPrev=document.getElementById('n-device-photo-preview');if(devPhPrev)devPhPrev.innerHTML='';
+  const devPhInput=document.getElementById('n-device-photo');if(devPhInput)devPhInput.value='';
   // populate city dropdown & reset district
   populateCitySelect('n-ccity');
   document.getElementById('n-ccity').value='';
@@ -1688,10 +1739,11 @@ function saveService(){
     device:{
       type:document.getElementById('n-dtype').value,
       brand:document.getElementById('n-dbrand').value,
-      model:document.getElementById('n-dmodel').value.trim(),
+      model:'',
       jeriyan:(document.getElementById('n-jeriyan')||{value:''}).value.trim(),
       capacity:document.getElementById('n-dcap').value,
-      installYear:document.getElementById('n-dyear').value.trim()
+      installYear:'',
+      photo:window._devicePhotoB64||null
     },
     fault:{
       description:fault,
@@ -2200,6 +2252,12 @@ function openCompleteModal(){
   calcCompleteTotal();
   const sigHint=document.getElementById('sig-hint');if(sigHint)sigHint.style.display='flex';
   initSignaturePad();
+  // Teslim alan kişi bölümünü göster/gizle
+  const teslimSec=document.getElementById('cp-teslim-sec');
+  if(teslimSec)teslimSec.style.display=window._teslimatType==='diger'?'block':'none';
+  // İmza bölümü başlığını güncelle
+  const sigLabel=document.getElementById('sig-section-label');
+  if(sigLabel)sigLabel.textContent=window._teslimatType==='diger'?'✍️ Teslim Alan Kişi İmzası':'✍️ Müşteri İmzası';
   document.getElementById('m-complete').classList.add('open');
 }
 function closeCompleteModal(){
@@ -2270,6 +2328,15 @@ function compressImage(file){
     img.src=url;
   });
 }
+async function previewDevicePhoto(input){
+  const prev=document.getElementById('n-device-photo-preview');
+  if(!input.files||!input.files[0])return;
+  const b64=await compressImage(input.files[0]);
+  if(b64){
+    window._devicePhotoB64=b64;
+    if(prev)prev.innerHTML='<img src="'+b64+'" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;border:1px solid var(--border);">';
+  }
+}
 async function previewCompPhotos(input){
   const prev=document.getElementById('cp-photo-preview');
   const cnt=document.getElementById('cp-photo-count');
@@ -2309,6 +2376,11 @@ async function confirmComplete(){
   state.services[idx].status='Tamamlandı';
   state.services[idx].warranty=warrantyYears;
   state.services[idx].customerSignature=getSigDataURL();
+  state.services[idx].teslimat={
+    type:window._teslimatType||'musteri',
+    name:document.getElementById('cp-teslim-name')?.value?.trim()||'',
+    phone:document.getElementById('cp-teslim-phone')?.value?.trim()||''
+  };
   state.services[idx].completedAt=new Date().toISOString();
   // Tamamlama anında kullanılan malzemeleri kaydet ve stoktan düş
   const cpParts=getCpPartRows();
@@ -2686,6 +2758,8 @@ function renderSrvDetail(srv){
   const s1=srv.status==='Bekliyor'?'act-o':'';
   const s2=srv.status==='Devam Ediyor'?'act':'';
   const s3=srv.status==='Tamamlandı'?'act-g':'';
+  const canEdit=srv.status!=='Tamamlandı';
+  const eb=(sec)=>canEdit?`<button onclick="editSrvSection('${sec}','${srv.id}')" style="background:none;border:none;font-size:16px;cursor:pointer;padding:0 4px;color:var(--blue);">✏️</button>`:'';
   document.getElementById('det-content').innerHTML=`
     <div class="det-sec">
       <div class="det-sec-t">📊 Durum</div>
@@ -2696,7 +2770,7 @@ function renderSrvDetail(srv){
       </div>
     </div>
     <div class="det-sec">
-      <div class="det-sec-t">👤 Müşteri Bilgileri</div>
+      <div class="det-sec-t" style="display:flex;justify-content:space-between;align-items:center;">👤 Müşteri Bilgileri${eb('customer')}</div>
       <div class="det-row"><span class="dl">Ad Soyad</span><span class="dv">${esc(srv.customer.name)}</span></div>
       <div class="det-row"><span class="dl">Telefon</span><span class="dv">${esc(phone)||'—'}</span></div>
       ${srv.customer.email?`<div class="det-row"><span class="dl">E-posta</span><span class="dv">${esc(srv.customer.email)}</span></div>`:''}
@@ -2705,23 +2779,26 @@ function renderSrvDetail(srv){
         <button class="det-btn" style="background:#E7FFEE;color:#128C7E" onclick="callCustomer('${phone}')">📞 Ara</button>
         <button class="det-btn" style="background:#E7FFEE;color:#128C7E" onclick="waCustomer('${phoneTR}')">📱 WhatsApp</button>
       </div>
+      <div style="margin-top:6px">
+        <button class="det-btn" style="background:#E3F2FD;color:#1565C0;width:100%;justify-content:center;" onclick="openMaps('${encodeURIComponent(addr)}')">📍 Haritada Aç</button>
+      </div>
     </div>
     <div class="det-sec">
-      <div class="det-sec-t">❄️ Cihaz Bilgileri</div>
+      <div class="det-sec-t" style="display:flex;justify-content:space-between;align-items:center;">❄️ Cihaz Bilgileri${eb('device')}</div>
       <div class="det-row"><span class="dl">Cihaz Türü</span><span class="dv">${esc(srv.device.type)}</span></div>
-      <div class="det-row"><span class="dl">Marka / Model</span><span class="dv">${esc(srv.device.brand)} ${esc(srv.device.model||'')}</span></div>
+      <div class="det-row"><span class="dl">Marka</span><span class="dv">${esc(srv.device.brand)}</span></div>
       ${srv.device.serial?`<div class="det-row"><span class="dl">Seri No</span><span class="dv">${esc(srv.device.serial)}</span></div>`:''}
       ${srv.device.capacity?`<div class="det-row"><span class="dl">Kapasite</span><span class="dv">${esc(srv.device.capacity)}</span></div>`:''}
-      ${srv.device.installYear?`<div class="det-row"><span class="dl">Kuruluş Yılı</span><span class="dv">${esc(srv.device.installYear)}</span></div>`:''}
+      ${srv.device.photo?`<div style="margin-top:8px"><img src="${srv.device.photo}" onclick="openImgFull(this.src)" style="width:100%;max-height:160px;object-fit:cover;border-radius:10px;border:1px solid var(--border);cursor:zoom-in;"></div>`:''}
     </div>
     <div class="det-sec">
-      <div class="det-sec-t">📅 Randevu</div>
+      <div class="det-sec-t" style="display:flex;justify-content:space-between;align-items:center;">📅 Randevu${eb('schedule')}</div>
       <div class="det-row"><span class="dl">Tarih</span><span class="dv">${fmtDate(srv.date)}</span></div>
       <div class="det-row"><span class="dl">Saat</span><span class="dv">${srv.time||'—'}</span></div>
       <div class="det-row"><span class="dl">Teknisyen</span><span class="dv">${esc(srv.technician||'—')}</span></div>
     </div>
     <div class="det-sec">
-      <div class="det-sec-t">🔍 Arıza & İşlem</div>
+      <div class="det-sec-t" style="display:flex;justify-content:space-between;align-items:center;">🔍 Arıza & İşlem${eb('fault')}</div>
       <div class="det-row"><span class="dl">İşlem Türü</span><span class="dv">${esc(srv.fault.type||'—')}</span></div>
       <div style="margin-top:6px"><div style="color:var(--txt3);font-size:10px;font-weight:700;margin-bottom:4px">ARIZA TANIMI</div>
         <div style="font-size:12px;color:var(--txt);line-height:1.6;white-space:pre-wrap">${esc(srv.fault.description||'—')}</div></div>
@@ -2746,7 +2823,7 @@ function renderSrvDetail(srv){
     </div>
     ${(srv.photos&&srv.photos.length)?`
     <div class="det-sec">
-      <div class="det-sec-t">📷 Servis Fotoğrafları</div>
+      <div class="det-sec-t">📷 Servis Sonrası Fotoğraflar</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px">
         ${srv.photos.map((p,i)=>`<img src="${p}" onclick="openPhotoView('${srv.id}',${i})" style="width:calc(50% - 4px);aspect-ratio:4/3;object-fit:cover;border-radius:12px;border:1px solid var(--border);cursor:pointer;">`).join('')}
       </div>
@@ -2819,6 +2896,8 @@ function generateWarrantyPDF(srv){
   const company=s.company||'Aras İklimlendirme';
   const compPhone=s.phone||'—';
   const compAddr=s.address||'—';
+  const compEmail=s.email||'';
+  const compWeb=s.web||'';
   const fmtD=(iso)=>{if(!iso)return '—';const p=(iso||'').slice(0,10).split('-');return p.length===3?p[2]+'.'+p[1]+'.'+p[0]:iso;};
   const completedStr=fmtD(srv.completedAt||srv.date);
 
@@ -2836,6 +2915,15 @@ function generateWarrantyPDF(srv){
   const customerAddr=[srv.customer.address,srv.customer.district,srv.customer.city].filter(Boolean).join(', ')||'—';
   const year=new Date().getFullYear();
 
+  const photosHtml=(srv.photos&&srv.photos.length)
+    ?'<div class="info-section"><div class="sec-hdr">SERVİS FOTOĞRAFLARI</div><div class="photos-grid">'+srv.photos.map(p=>'<img src="'+p+'" alt="fotoğraf">').join('')+'</div></div>'
+    :'';
+
+  const sigHtml = srv.teslimat&&srv.teslimat.type==='diger'
+    ? (srv.customerSignature ? '<img src="'+srv.customerSignature+'" style="max-height:60px;max-width:160px;object-fit:contain;display:block;margin:0 auto 4px;">' : '')
+      + '<div style="font-size:8.5px;color:#C62828;margin-top:2px;">⚠️ Teslim alan: '+(srv.teslimat.name||'—')+'</div>'
+    : (srv.customerSignature ? '<img src="'+srv.customerSignature+'" style="max-height:60px;max-width:160px;object-fit:contain;display:block;margin:0 auto 4px;">' : '');
+
   const html=`<!DOCTYPE html>
 <html lang="tr">
 <head>
@@ -2843,232 +2931,221 @@ function generateWarrantyPDF(srv){
 <title>Garanti Belgesi — ${srv.id}</title>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Arial,Helvetica,sans-serif;background:#e8e8e0;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
-.print-btn{text-align:center;padding:14px;background:#1B5E20;}
-.print-btn button{background:#FF8F00;color:#fff;border:none;border-radius:8px;padding:12px 32px;font-size:15px;font-weight:700;cursor:pointer;}
-.print-btn span{color:rgba(255,255,255,.7);font-size:11px;margin-left:14px;}
-.outer{width:210mm;margin:16px auto;background:#fff;border:10px solid #2E7D32;padding:6px;}
-.inner{border:2px solid #81C784;padding:0;}
+body{font-family:Arial,Helvetica,sans-serif;background:#d6dde8;-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+.print-btn{text-align:center;padding:12px 16px;background:#1565C0;display:flex;align-items:center;justify-content:center;gap:14px;}
+.print-btn button{background:#fff;color:#1565C0;border:none;border-radius:6px;padding:10px 28px;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:.3px;}
+.print-btn .back-btn{background:rgba(255,255,255,.15);color:#fff;border:1.5px solid rgba(255,255,255,.5);border-radius:6px;padding:10px 18px;font-size:13px;font-weight:600;cursor:pointer;}
+.print-btn span{color:rgba(255,255,255,.75);font-size:11px;}
+/* FOTOGRAF */
+.photos-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;padding:10px 14px;}
+.photos-grid img{width:100%;height:110px;object-fit:cover;border-radius:4px;border:1px solid #dde6f5;}
 
-/* HEADER */
-.hdr{background:linear-gradient(135deg,#1B5E20 0%,#388E3C 60%,#1B5E20 100%);padding:22px 32px;display:flex;justify-content:space-between;align-items:center;}
-.hdr-left .hname{color:#fff;font-size:20px;font-weight:800;letter-spacing:.5px;}
-.hdr-left .hsub{color:rgba(255,255,255,.65);font-size:9px;letter-spacing:2px;font-weight:600;margin-top:3px;}
-.hdr-right{text-align:right;}
-.hdr-right p{color:#fff;font-size:13px;font-weight:600;line-height:2.1;letter-spacing:.2px;}
-.gold-bar{height:5px;background:linear-gradient(90deg,#E65100,#FF8F00,#FFC107,#FF8F00,#E65100);}
+/* KAGIT */
+.page{width:210mm;margin:18px auto;background:#fff;border:3px solid #1565C0;padding:0;}
 
-/* TITLE */
-.title-block{text-align:center;padding:22px 32px 16px;border-bottom:1px solid #E8F5E9;}
-.title-main{font-size:28px;font-weight:900;color:#1B5E20;letter-spacing:4px;text-transform:uppercase;font-family:Georgia,serif;}
-.title-en{font-size:10px;color:#aaa;letter-spacing:5px;font-weight:600;margin-top:4px;text-transform:uppercase;}
-.meta-row{display:flex;justify-content:center;gap:40px;margin-top:16px;}
-.meta-item .ml{font-size:8px;color:#aaa;font-weight:700;letter-spacing:.8px;text-transform:uppercase;}
-.meta-item .mv{font-size:13px;font-weight:800;color:#2E7D32;margin-top:2px;}
+/* BASLIK ALANI */
+.doc-title{text-align:center;padding:18px 24px 12px;border-bottom:2px solid #1565C0;}
+.doc-title h1{font-size:26px;font-weight:900;color:#1565C0;letter-spacing:6px;text-transform:uppercase;}
+.doc-title .subtitle{font-size:9.5px;color:#1565C0;letter-spacing:2px;margin-top:4px;}
 
-/* WARRANTY BANNER */
-.w-banner{margin:18px 28px 0;background:#E8F5E9;border:2px solid #4CAF50;border-radius:8px;padding:16px 20px;display:flex;align-items:center;gap:20px;}
-.w-shield{width:56px;height:56px;background:linear-gradient(135deg,#1B5E20,#4CAF50);border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:26px;flex-shrink:0;}
-.w-info h3{font-size:17px;font-weight:900;color:#1B5E20;}
-.w-info p{font-size:10px;color:#388E3C;margin-top:3px;line-height:1.5;}
-.w-dates{margin-left:auto;text-align:right;flex-shrink:0;}
-.w-dates .dl{font-size:8px;color:#aaa;font-weight:700;letter-spacing:.5px;text-transform:uppercase;}
-.w-dates .dv{font-size:12px;font-weight:800;color:#1B5E20;margin-top:1px;margin-bottom:6px;}
+/* BOLUM BASLIKLAR */
+.sec-hdr{background:#1565C0;color:#fff;font-size:9.5px;font-weight:800;letter-spacing:2px;padding:5px 12px;text-transform:uppercase;}
 
-/* SECTIONS */
-.body{padding:14px 28px 80px;}
-.sec{margin-bottom:16px;}
-.sec-t{font-size:9px;font-weight:800;color:#1B5E20;letter-spacing:1.5px;text-transform:uppercase;border-bottom:2px solid #4CAF50;padding-bottom:5px;margin-bottom:10px;}
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:6px 24px;}
-.field .fl{font-size:8px;color:#aaa;font-weight:700;letter-spacing:.4px;text-transform:uppercase;}
-.field .fv{font-size:11.5px;font-weight:600;color:#1a1a2e;margin-top:2px;}
-.action-box{background:#F9FBF9;border:1px solid #E8F5E9;border-radius:6px;padding:11px 14px;font-size:11.5px;line-height:1.7;color:#333;}
+/* URETICI + SATICI ALANLARI */
+.two-col{display:grid;grid-template-columns:1fr 1fr;border-bottom:1.5px solid #1565C0;}
+.col-box{padding:0;}
+.col-box:first-child{border-right:1.5px solid #1565C0;}
+.col-info{padding:10px 14px;font-size:10px;line-height:2;}
+.col-info .row{display:flex;gap:6px;}
+.col-info .lbl{color:#1565C0;font-weight:700;min-width:68px;font-size:9.5px;}
+.col-info .val{color:#111;font-size:10px;}
+.stamp-area{min-height:88px;padding:10px 14px;display:flex;align-items:center;justify-content:center;}
+.stamp-area-inner{border:1.5px dashed #aac;width:100%;height:72px;display:flex;align-items:center;justify-content:center;border-radius:4px;}
+.stamp-area-inner span{color:#aaa;font-size:9px;letter-spacing:.5px;}
 
-/* TABLE */
-table{width:100%;border-collapse:collapse;font-size:11.5px;}
-table thead tr{background:#2E7D32;}
-table th{color:#fff;padding:8px 10px;font-size:9px;font-weight:700;letter-spacing:.5px;text-align:left;}
-table td{padding:7px 10px;border-bottom:1px solid #E8F5E9;color:#333;}
-table tr:nth-child(even) td{background:#F9FBF9;}
+/* URUNUN BOLUMU */
+.urun-table{width:100%;border-collapse:collapse;font-size:10px;}
+.urun-table td{padding:5px 12px;border-bottom:1px solid #dde6f5;vertical-align:middle;}
+.urun-table td.lbl{color:#1565C0;font-weight:700;width:44%;background:#f0f5ff;font-size:9.5px;letter-spacing:.3px;border-right:1.5px solid #1565C0;}
+.urun-table td.val{color:#111;font-weight:500;}
+.urun-table tr:last-child td{border-bottom:none;}
 
-/* PRICE */
-.price-box{background:#1B5E20;border-radius:7px;padding:13px 18px;display:flex;justify-content:space-between;align-items:center;margin-top:14px;}
-.price-box .pl{color:rgba(255,255,255,.8);font-size:10px;font-weight:700;letter-spacing:1px;}
-.price-box .pv{color:#fff;font-size:20px;font-weight:900;}
+/* ISLEM VE MALZEME */
+.info-section{border-bottom:1.5px solid #1565C0;}
+.info-body{padding:8px 14px;font-size:10px;line-height:1.7;color:#222;}
+.parts-table{width:100%;border-collapse:collapse;font-size:9.5px;}
+.parts-table th{background:#1565C0;color:#fff;padding:5px 10px;text-align:left;font-size:9px;font-weight:700;letter-spacing:.5px;}
+.parts-table td{padding:5px 10px;border-bottom:1px solid #dde6f5;color:#333;}
+.parts-table tr:last-child td{border-bottom:none;}
 
-/* TERMS */
-.terms{background:#FFF8E1;border:1px solid #FFE082;border-radius:6px;padding:11px 14px;margin-top:14px;}
-.terms p{font-size:9.5px;color:#5D4037;line-height:1.7;}
+/* IMZA ALANI */
+.sign-section{border-bottom:1.5px solid #1565C0;}
+.sign-grid{display:grid;grid-template-columns:1fr 1fr;min-height:110px;}
+.sign-cell{padding:10px 14px;text-align:center;}
+.sign-cell:first-child{border-right:1.5px solid #1565C0;}
+.sign-cell .s-title{font-size:8.5px;font-weight:800;color:#1565C0;letter-spacing:1px;text-transform:uppercase;margin-bottom:6px;}
+.sign-cell .s-name{font-size:9px;font-weight:700;color:#333;margin-top:6px;}
+.sign-cell .s-line{height:1px;background:#333;margin:44px 16px 6px;}
+.kase-box{border:1.5px solid #1565C0;border-radius:4px;padding:6px 12px;display:inline-block;text-align:center;margin-top:8px;}
+.kase-box .kn{font-size:9.5px;font-weight:900;color:#1565C0;letter-spacing:1.5px;}
+.kase-box .ks{height:1px;background:#1565C0;margin:4px 0;}
+.kase-box .ki{font-size:8.5px;color:#1565C0;line-height:1.8;}
 
-/* SIGN */
-.sign-row{display:grid;grid-template-columns:1fr 1fr;gap:28px;margin-top:20px;padding-top:16px;border-top:1px dashed #ccc;}
-.sign-box{text-align:center;}
-.sign-line{height:1px;background:#333;margin:0 16px;margin-top:44px;margin-bottom:6px;}
-.sign-label{font-size:10px;font-weight:700;color:#333;}
-.sign-sub{font-size:9px;color:#888;margin-top:2px;}
-.sign-img-wrap{height:70px;display:flex;align-items:flex-end;justify-content:center;padding-bottom:4px;}
-.sign-img-wrap img{max-height:66px;max-width:200px;object-fit:contain;}
-/* KAŞE */
-.kase-wrap{display:flex;justify-content:center;margin-bottom:6px;}
-.kase{border:2px solid #1B5E20;border-radius:6px;padding:8px 16px;display:inline-block;text-align:center;}
-.kase-name{font-size:10.5px;font-weight:900;color:#1B5E20;letter-spacing:1.5px;}
-.kase-sep{height:1.5px;background:#4CAF50;margin:5px 0;}
-.kase-info{font-size:9px;color:#388E3C;line-height:1.7;}
+/* TUTAR */
+.price-strip{background:#1565C0;padding:8px 16px;display:flex;justify-content:space-between;align-items:center;border-bottom:1.5px solid #1565C0;}
+.price-strip .pl{color:rgba(255,255,255,.85);font-size:9px;font-weight:700;letter-spacing:.8px;}
+.price-strip .pv{color:#fff;font-size:18px;font-weight:900;}
+
+/* YASAL METIN */
+.legal{padding:10px 16px;border-bottom:1.5px solid #1565C0;}
+.legal p{font-size:8px;color:#444;line-height:1.8;text-align:justify;}
 
 /* FOOTER */
-.footer{background:#1B5E20;padding:10px 28px;display:flex;justify-content:space-between;align-items:center;}
-.footer p{font-size:9px;color:rgba(255,255,255,.6);}
-
-/* Watermark */
-.wm{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) rotate(-30deg);font-size:80px;font-weight:900;color:rgba(76,175,80,.05);white-space:nowrap;pointer-events:none;letter-spacing:10px;font-family:Georgia,serif;}
+.doc-footer{padding:7px 16px;display:flex;justify-content:space-between;align-items:center;background:#f0f5ff;}
+.doc-footer span{font-size:8px;color:#1565C0;font-weight:600;}
 
 @media print{
   body{background:#fff;}
   .print-btn{display:none!important;}
-  .outer{margin:0;border:10px solid #2E7D32;width:100%;}
-  .wm{display:none;}
+  .page{margin:0;width:100%;border:3px solid #1565C0;}
 }
 </style>
 </head>
 <body>
-<div class="print-btn no-print">
-  <button onclick="window.print()">🖨️ PDF Olarak Kaydet / Yazdır</button>
-  <span>Yazdırma ekranında "Hedef: PDF Olarak Kaydet" seçeneğini seçin</span>
+<div class="print-btn">
+  <button class="back-btn" onclick="window.close()">✕ Kapat</button>
+  <button onclick="window.print()">🖨️ Yazdır / PDF Kaydet</button>
+  <span>Yazdırma ekranında "Hedef: PDF Olarak Kaydet" seçin</span>
 </div>
-<div class="wm">GARANTİ</div>
-<div class="outer">
-  <div class="inner">
 
-    <!-- HEADER -->
-    <div class="hdr">
-      <div class="hdr-left" style="display:flex;align-items:center;gap:16px;">
-        <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MjAgNDAwIj4KPGRlZnM+CiAgPHJhZGlhbEdyYWRpZW50IGlkPSJzdW5ncmQiIGN4PSI1MCUiIGN5PSI1MCUiIHI9IjUwJSI+CiAgICA8c3RvcCBvZmZzZXQ9IjAlIiBzdG9wLWNvbG9yPSIjRkZCMzAwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNFNjUxMDAiLz4KICA8L3JhZGlhbEdyYWRpZW50Pgo8L2RlZnM+Cgo8IS0tIENyZXNjZW50OiBiaWcgY2lyY2xlIGNsaXAgbWludXMgb2Zmc2V0IHNtYWxsIGNpcmNsZSAtLT4KPGNsaXBQYXRoIGlkPSJjcmVzYyI+CiAgPHBhdGggZD0iTSAxODUgMjAwIG0gMCAtMTY1IGEgMTY1IDE2NSAwIDEgMSAwIDMzMCBhIDE2NSAxNjUgMCAxIDEgMCAtMzMwIFoiLz4KPC9jbGlwUGF0aD4KPGNpcmNsZSBjeD0iMTg1IiBjeT0iMjAwIiByPSIxNjUiIGZpbGw9IiMxQUI4RDQiLz4KPGNpcmNsZSBjeD0iMjQ3IiBjeT0iMTgyIiByPSIxMjUiIGZpbGw9IndoaXRlIi8+Cgo8IS0tIE9yYW5nZSBzdW4gY2lyY2xlIC0tPgo8Y2lyY2xlIGN4PSIxODUiIGN5PSIyMDAiIHI9Ijk1IiBmaWxsPSJ1cmwoI3N1bmdyZCkiLz4KCjwhLS0gU3VuIHJheXMgKG91dGVyKSAtLT4KPGxpbmUgeDE9IjI4My4wIiB5MT0iMjAwLjAiIHgyPSIzMzUuMCIgeTI9IjIwMC4wIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIyNjkuOSIgeTE9IjI0OS4wIiB4Mj0iMzE0LjkiIHkyPSIyNzUuMCIgc3Ryb2tlPSIjRTg1MjBBIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMjM0LjAiIHkxPSIyODQuOSIgeDI9IjI2MC4wIiB5Mj0iMzI5LjkiIHN0cm9rZT0iI0U4NTIwQSIgc3Ryb2tlLXdpZHRoPSIxMCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE4NS4wIiB5MT0iMjk4LjAiIHgyPSIxODUuMCIgeTI9IjM1MC4wIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxMzYuMCIgeTE9IjI4NC45IiB4Mj0iMTEwLjAiIHkyPSIzMjkuOSIgc3Ryb2tlPSIjRTg1MjBBIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMTAwLjEiIHkxPSIyNDkuMCIgeDI9IjU1LjEiIHkyPSIyNzUuMCIgc3Ryb2tlPSIjRTg1MjBBIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iODcuMCIgeTE9IjIwMC4wIiB4Mj0iMzUuMCIgeTI9IjIwMC4wIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxMDAuMSIgeTE9IjE1MS4wIiB4Mj0iNTUuMSIgeTI9IjEyNS4wIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxMzYuMCIgeTE9IjExNS4xIiB4Mj0iMTEwLjAiIHkyPSI3MC4xIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxODUuMCIgeTE9IjEwMi4wIiB4Mj0iMTg1LjAiIHkyPSI1MC4wIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIyMzQuMCIgeTE9IjExNS4xIiB4Mj0iMjYwLjAiIHkyPSI3MC4xIiBzdHJva2U9IiNFODUyMEEiIHN0cm9rZS13aWR0aD0iMTAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIyNjkuOSIgeTE9IjE1MS4wIiB4Mj0iMzE0LjkiIHkyPSIxMjUuMCIgc3Ryb2tlPSIjRTg1MjBBIiBzdHJva2Utd2lkdGg9IjEwIiBzdHJva2UtbGluZWNhcD0icm91bmQiLz4KCjwhLS0gQ2xpcCByYXlzIHRvIGF2b2lkIGdvaW5nIGludG8gY3Jlc2NlbnQgLS0+Cgo8IS0tIEhvdXNlIC0tPgoKPHJlY3QgeD0iMTUzLjgiIHk9IjIyNi4wIiB3aWR0aD0iNjIuNCIgaGVpZ2h0PSI0NC4yIiBmaWxsPSIjN0IxQTFBIiByeD0iMyIvPgo8cG9seWdvbiBwb2ludHM9IjE0Ni4wLDE3NC4wIDIyNC4wLDE3NC4wIDE4NS4wLDE2OC44IiBmaWxsPSIjNUExMDEwIi8+CjxyZWN0IHg9IjE5NS40IiB5PSIxNTUuOCIgd2lkdGg9IjkuNCIgaGVpZ2h0PSIxOC4yIiBmaWxsPSIjN0IxQTFBIi8+CjxyZWN0IHg9IjE3OC44IiB5PSIyMzkuMyIgd2lkdGg9IjEyLjUiIGhlaWdodD0iMTkuOSIgZmlsbD0iIzRBMUE2QSIgb3BhY2l0eT0iMC42IiByeD0iMiIvPgo8cmVjdCB4PSIxNTkuMCIgeT0iMjM3LjEiIHdpZHRoPSIxMS40IiBoZWlnaHQ9IjExLjQiIGZpbGw9InJnYmEoMTAwLDE2MCwyMjAsMC41KSIgcng9IjIiLz4KPHJlY3QgeD0iMTk5LjYiIHk9IjIzNy4xIiB3aWR0aD0iMTEuNCIgaGVpZ2h0PSIxMS40IiBmaWxsPSJyZ2JhKDEwMCwxNjAsMjIwLDAuNSkiIHJ4PSIyIi8+CgoKPCEtLSBTbm93Zmxha2Ugb3ZlcmxheSAtLT4KPGxpbmUgeDE9IjE4NSIgeTE9IjIwMCIgeDI9IjIyMy4wIiB5Mj0iMjAwLjAiIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMjA1LjkiIHkxPSIyMDAuMCIgeDI9IjIxNC42IiB5Mj0iMjA3LjMiIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMjA1LjkiIHkxPSIyMDAuMCIgeDI9IjIxNC42IiB5Mj0iMTkyLjciIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMTg1IiB5MT0iMjAwIiB4Mj0iMjA0LjAiIHkyPSIyMzIuOSIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxOTUuNCIgeTE9IjIxOC4xIiB4Mj0iMTkzLjUiIHkyPSIyMjkuMyIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxOTUuNCIgeTE9IjIxOC4xIiB4Mj0iMjA2LjIiIHkyPSIyMjIuMCIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxODUiIHkxPSIyMDAiIHgyPSIxNjYuMCIgeTI9IjIzMi45IiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE3NC42IiB5MT0iMjE4LjEiIHgyPSIxNjMuOCIgeTI9IjIyMi4wIiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE3NC42IiB5MT0iMjE4LjEiIHgyPSIxNzYuNSIgeTI9IjIyOS4zIiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE4NSIgeTE9IjIwMCIgeDI9IjE0Ny4wIiB5Mj0iMjAwLjAiIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI1IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMTY0LjEiIHkxPSIyMDAuMCIgeDI9IjE1NS40IiB5Mj0iMTkyLjciIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMTY0LjEiIHkxPSIyMDAuMCIgeDI9IjE1NS40IiB5Mj0iMjA3LjMiIHN0cm9rZT0iI0RERUVGRiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWNhcD0icm91bmQiLz48bGluZSB4MT0iMTg1IiB5MT0iMjAwIiB4Mj0iMTY2LjAiIHkyPSIxNjcuMSIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjUiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxNzQuNSIgeTE9IjE4MS45IiB4Mj0iMTc2LjUiIHkyPSIxNzAuNyIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxNzQuNSIgeTE9IjE4MS45IiB4Mj0iMTYzLjgiIHkyPSIxNzguMCIgc3Ryb2tlPSIjRERFRUZGIiBzdHJva2Utd2lkdGg9IjQiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIvPjxsaW5lIHgxPSIxODUiIHkxPSIyMDAiIHgyPSIyMDQuMCIgeTI9IjE2Ny4xIiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE5NS40IiB5MT0iMTgxLjkiIHgyPSIyMDYuMiIgeTI9IjE3OC4wIiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+PGxpbmUgeDE9IjE5NS40IiB5MT0iMTgxLjkiIHgyPSIxOTMuNSIgeTI9IjE3MC43IiBzdHJva2U9IiNEREVFRkYiIHN0cm9rZS13aWR0aD0iNCIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIi8+CjxjaXJjbGUgY3g9IjE4NSIgY3k9IjIwMCIgcj0iOCIgZmlsbD0id2hpdGUiLz4KCjwhLS0gVGV4dDogQXJhcyAtLT4KPHRleHQgeD0iMzY1IiB5PSIxOTUiIGZvbnQtZmFtaWx5PSJHZW9yZ2lhLHNlcmlmIiBmb250LXNpemU9IjUyIiBmb250LXdlaWdodD0iYm9sZCIgZmlsbD0iIzFEMzU1NyIgbGV0dGVyLXNwYWNpbmc9IjEiPkFyYXM8L3RleHQ+CjwhLS0gVGV4dDogxLBLTMSwTUxFTkTEsFJNRSAtLT4KPHRleHQgeD0iMzQ1IiB5PSIyNDUiIGZvbnQtZmFtaWx5PSJBcmlhbCxIZWx2ZXRpY2Esc2Fucy1zZXJpZiIgZm9udC1zaXplPSIyNCIgZm9udC13ZWlnaHQ9IjcwMCIgZmlsbD0iI0MwMzkyQiIgbGV0dGVyLXNwYWNpbmc9IjEuNSI+xLBLTMSwTUxFTkTEsFJNRTwvdGV4dD4KCjwvc3ZnPg==" alt="Logo" style="width:72px;height:72px;object-fit:contain;background:#fff;border-radius:12px;padding:4px;flex-shrink:0;">
-        <div>
-          <div class="hname">${company.toUpperCase()}</div>
-          <div class="hsub">ISITMA · SOĞUTMA · İKLİMLENDİRME HİZMETLERİ</div>
-        </div>
-      </div>
-      <div class="hdr-right">
-        <p>📞 ${compPhone}</p>
-        <p>📍 ${compAddr}</p>
-      </div>
-    </div>
-    <div class="gold-bar"></div>
+<div class="page">
 
-    <!-- TITLE -->
-    <div class="title-block">
-      <div class="title-main">Garanti Belgesi</div>
-      <div class="title-en">Warranty Certificate</div>
-      <div class="meta-row">
-        <div class="meta-item"><div class="ml">Belge No</div><div class="mv">GAR-${srv.id}</div></div>
-        <div class="meta-item"><div class="ml">Düzenlenme Tarihi</div><div class="mv">${completedStr}</div></div>
-        <div class="meta-item"><div class="ml">Teknisyen</div><div class="mv">${srv.technician||'—'}</div></div>
-      </div>
-    </div>
-
-    <!-- WARRANTY BANNER -->
-    <div class="w-banner">
-      <div class="w-shield">🛡️</div>
-      <div class="w-info">
-        <h3>${warrantyLabel} GARANTİ</h3>
-        <p>Bu belge, aşağıdaki servis işlemi için ${company} güvencesiyle düzenlenmiştir.<br>Herhangi bir sorun yaşandığında bu belgeyi ibraz ediniz.</p>
-      </div>
-      ${srv.warranty>0?`<div class="w-dates">
-        <div class="dl">Başlangıç</div><div class="dv">${completedStr}</div>
-        <div class="dl">Bitiş</div><div class="dv" style="color:#C62828">${warrantyEndStr}</div>
-      </div>`:''}
-    </div>
-
-    <!-- BODY -->
-    <div class="body">
-
-      <!-- Müşteri -->
-      <div class="sec" style="margin-top:16px">
-        <div class="sec-t">👤 Müşteri Bilgileri</div>
-        <div class="grid2">
-          <div class="field"><div class="fl">Ad Soyad</div><div class="fv">${srv.customer.name}</div></div>
-          <div class="field"><div class="fl">Telefon</div><div class="fv">${srv.customer.phone||'—'}</div></div>
-          <div class="field" style="grid-column:1/-1"><div class="fl">Adres</div><div class="fv">${customerAddr}</div></div>
-        </div>
-      </div>
-
-      <!-- Cihaz -->
-      <div class="sec">
-        <div class="sec-t">❄️ Cihaz Bilgileri</div>
-        <div class="grid2">
-          <div class="field"><div class="fl">Cihaz Türü</div><div class="fv">${srv.device.type||'—'}</div></div>
-          <div class="field"><div class="fl">Marka / Model</div><div class="fv">${srv.device.brand||'—'} ${srv.device.model||''}</div></div>
-          ${srv.device.capacity?`<div class="field"><div class="fl">Kapasite</div><div class="fv">${srv.device.capacity}</div></div>`:''}
-          ${srv.device.installYear?`<div class="field"><div class="fl">Kuruluş Yılı</div><div class="fv">${srv.device.installYear}</div></div>`:''}
-        </div>
-      </div>
-
-      <!-- Yapılan İşlem -->
-      <div class="sec">
-        <div class="sec-t">🔧 Gerçekleştirilen Servis İşlemi</div>
-        <div class="action-box">${(srv.fault.action||'—').replace(/\n/g,'<br>')}</div>
-      </div>
-
-      <!-- Malzemeler -->
-      <div class="sec">
-        <div class="sec-t">🔩 Kullanılan Malzeme ve Parçalar</div>
-        <table>
-          <thead><tr><th style="width:40px;text-align:center">#</th><th>Malzeme / Parça Adı</th><th style="width:80px;text-align:center">Miktar</th></tr></thead>
-          <tbody>${partsRows}</tbody>
-        </table>
-      </div>
-
-      <!-- Tutar -->
-      <div class="price-box">
-        <div class="pl">TOPLAM HİZMET BEDELİ (KDV DAHİL)</div>
-        <div class="pv">₺${(srv.pricing.total||0).toLocaleString('tr-TR',{minimumFractionDigits:2})}</div>
-      </div>
-
-      <!-- Koşullar -->
-      <div class="terms">
-        <p><strong style="color:#E65100">Garanti Koşulları:</strong> Bu belge yalnızca yukarıda belirtilen servis işlemine aittir. Garanti kapsamı; yapılan işçilik ve kullanılan orijinal yedek parçaları içermektedir. Müşteri kaynaklı fiziksel hasar, yanlış kullanım, yetkisiz müdahale, doğal afet ve elektrik dalgalanması kaynaklı arızalar garanti dışındadır. Garanti hakkından yararlanmak için bu belge zorunlu olarak ibraz edilmelidir.</p>
-      </div>
-
-      <!-- İmza -->
-      <div class="sign-row">
-        <div class="sign-box">
-          ${srv.customerSignature
-            ? '<div class="sign-img-wrap"><img src="'+srv.customerSignature+'" alt="imza"></div>'
-            : '<div class="sign-line"></div>'}
-          <div class="sign-label">${srv.customer.name}</div>
-          <div class="sign-sub">Müşteri İmzası</div>
-        </div>
-        <div class="sign-box">
-          <div class="kase-wrap"><div class="kase">
-            <div class="kase-name">${company.toUpperCase()}</div>
-            <div class="kase-sep"></div>
-            ${compPhone!=='—'?'<div class="kase-info">📞 '+compPhone+'</div>':''}
-            ${compAddr!=='—'?'<div class="kase-info">📍 '+compAddr+'</div>':''}
-          </div></div>
-          <div class="sign-sub">Yetkili İmza / Kaşe</div>
-        </div>
-      </div>
-
-    </div><!-- end body -->
-
-    <!-- FOOTER -->
-    <div class="footer">
-      <p>© ${year} ${company} — Tüm hakları saklıdır.</p>
-      <p>Belge No: GAR-${srv.id} | ${completedStr}</p>
-      <p>Dijital sistem tarafından oluşturulmuştur.</p>
-    </div>
-
+  <!-- BASLIK -->
+  <div class="doc-title">
+    <h1>GARANTİ BELGESİ</h1>
+    <div class="subtitle">Belge No: GAR-${srv.id} &nbsp;|&nbsp; Düzenlenme Tarihi: ${completedStr}</div>
   </div>
+
+  <!-- URETİCİ FİRMA + KASE -->
+  <div class="two-col">
+    <div class="col-box">
+      <div class="sec-hdr">ÜRETİCİ FİRMA</div>
+      <div class="col-info">
+        <div class="row"><span class="lbl">FİRMA ADI</span><span class="val">${company}</span></div>
+        <div class="row"><span class="lbl">ADRESİ</span><span class="val">${compAddr}</span></div>
+        <div class="row"><span class="lbl">TELEFON</span><span class="val">${compPhone}</span></div>
+        ${compEmail?'<div class="row"><span class="lbl">E-POSTA</span><span class="val">'+compEmail+'</span></div>':''}
+        ${compWeb?'<div class="row"><span class="lbl">WEB</span><span class="val">'+compWeb+'</span></div>':''}
+      </div>
+    </div>
+    <div class="col-box">
+      <div class="sec-hdr">FİRMA YETKİLİSİNİN KAŞE VE İMZASI</div>
+      <div class="stamp-area">
+        <div class="stamp-area-inner"><span>KAŞE / İMZA</span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SATICI FİRMA + YETKİLİ İMZA -->
+  <div class="two-col">
+    <div class="col-box">
+      <div class="sec-hdr">SATICI FİRMA</div>
+      <div class="col-info">
+        <div class="row"><span class="lbl">FİRMA ADI</span><span class="val">${company}</span></div>
+        <div class="row"><span class="lbl">ADRESİ</span><span class="val">${compAddr}</span></div>
+        <div class="row"><span class="lbl">TELEFON</span><span class="val">${compPhone}</span></div>
+        ${compEmail?'<div class="row"><span class="lbl">E-POSTA</span><span class="val">'+compEmail+'</span></div>':''}
+        ${compWeb?'<div class="row"><span class="lbl">WEB</span><span class="val">'+compWeb+'</span></div>':''}
+      </div>
+    </div>
+    <div class="col-box">
+      <div class="sec-hdr">YETKİLİ SATICI KAŞE-İMZA / TARİH</div>
+      <div class="sign-grid">
+        <div class="sign-cell">
+          <div class="s-title">MÜŞTERİ İMZASI</div>
+          ${sigHtml || '<div class="s-line"></div>'}
+          <div class="s-name">${srv.customer.name}</div>
+          <div style="font-size:8px;color:#888;">${srv.customer.phone||''}</div>
+        </div>
+        <div class="sign-cell">
+          <div class="s-title">YETKİLİ KAŞE</div>
+          <div class="kase-box">
+            <div class="kn">${company.toUpperCase()}</div>
+            <div class="ks"></div>
+            ${compPhone!=='—'?'<div class="ki">'+compPhone+'</div>':''}
+            ${compAddr!=='—'?'<div class="ki">'+compAddr+'</div>':''}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- URUNUN BİLGİLERİ -->
+  <div class="info-section">
+    <div class="sec-hdr">ÜRÜNÜN</div>
+    <table class="urun-table">
+      <tr><td class="lbl">CİNSİ</td><td class="val">${srv.device.type||'—'}</td></tr>
+      <tr><td class="lbl">MARKASI</td><td class="val">${srv.device.brand||'—'}</td></tr>
+      ${srv.device.capacity?'<tr><td class="lbl">KAPASİTESİ (BTU)</td><td class="val">'+srv.device.capacity+'</td></tr>':''}
+      <tr><td class="lbl">TESLİM TARİHİ</td><td class="val">${completedStr}</td></tr>
+      <tr><td class="lbl">TESLİM YERİ</td><td class="val">${customerAddr}</td></tr>
+      <tr><td class="lbl">GARANTİ SÜRESİ</td><td class="val">${warrantyLabel}${srv.warranty>0?' &nbsp;('+completedStr+' – '+warrantyEndStr+')':''}</td></tr>
+      <tr><td class="lbl">FATURA TARİHİ</td><td class="val">${completedStr}</td></tr>
+      <tr><td class="lbl">FATURA NO / SERVİS NO</td><td class="val">${srv.id}</td></tr>
+    </table>
+  </div>
+
+  <!-- YAPILAN İŞLEM -->
+  <div class="info-section">
+    <div class="sec-hdr">GERÇEKLEŞTİRİLEN SERVİS İŞLEMİ</div>
+    <div class="info-body">${(srv.fault.action||'—').replace(/\n/g,'<br>')}</div>
+  </div>
+
+  <!-- KULLANILAN MALZEME -->
+  <div class="info-section">
+    <div class="sec-hdr">KULLANILAN MALZEME VE PARÇALAR</div>
+    <table class="parts-table">
+      <thead><tr><th style="width:36px;text-align:center">#</th><th>Malzeme / Parça Adı</th><th style="width:72px;text-align:center">Miktar</th></tr></thead>
+      <tbody>${partsRows}</tbody>
+    </table>
+  </div>
+
+  <!-- HİZMET BEDELİ -->
+  <div class="price-strip">
+    <span class="pl">TOPLAM HİZMET BEDELİ (KDV DAHİL)</span>
+    <span class="pv">₺${(srv.pricing.total||0).toLocaleString('tr-TR',{minimumFractionDigits:2})}</span>
+  </div>
+
+  <!-- SERVİS FOTOĞRAFLARI -->
+  ${photosHtml}
+
+  <!-- YASAL METİN -->
+  <div class="legal">
+    <p>Bu belgenin kullanılmasında; 4077 sayılı Tüketicinin Korunması Hakkında Kanun ve kanuna dayanılarak yürürlüğe konulan garanti belgesi uygulama esaslarına dair tebliğ uyarınca T.C. Sanayi ve Ticaret Bakanlığı Tüketicinin ve Rekabetin Korunması Genel Müdürlüğü tarafından izin verilmiştir. Garanti kapsamı yalnızca yapılan işçilik ve kullanılan orijinal yedek parçaları kapsamaktadır. Müşteri kaynaklı fiziksel hasar, yanlış kullanım, yetkisiz müdahale, doğal afet ve elektrik dalgalanması nedeniyle oluşan arızalar garanti kapsamı dışındadır. Garanti hakkından yararlanmak için bu belgenin ibraz edilmesi zorunludur.</p>
+  </div>
+
+  <!-- ALT BİLGİ -->
+  <div class="doc-footer">
+    <span>&copy; ${year} ${company}</span>
+    <span>Belge No: GAR-${srv.id} &nbsp;|&nbsp; ${completedStr}</span>
+    <span>Teknisyen: ${srv.technician||'—'}</span>
+  </div>
+
 </div>
 </body></html>`;
 
-  const win=window.open('','_blank');
+
+    const win=window.open('','_blank');
   if(win){win.document.write(html);win.document.close();}
   else{toast('⚠️ Pop-up izni gerekli — tarayıcı ayarlarından izin verin.');}
 }
 
 function setDetStatus(status){
-  if(status==='Tamamlandı'){openCompleteModal();return;}
+  if(status==='Tamamlandı'){
+    window._teslimatType='musteri';
+    document.getElementById('m-teslim').classList.add('open');
+    return;
+  }
   const srv=state.currentSrv;if(!srv)return;
   const idx=state.services.findIndex(s=>s.id===srv.id);if(idx===-1)return;
   state.services[idx].status=status;
@@ -3434,6 +3511,132 @@ function saveStokItem(){
   closeStokModal();
   toast('✅ '+name+' stoka eklendi!');
   renderStock();
+}
+
+// ═══════════════════════════════════
+//  TESLIM ALAN
+// ═══════════════════════════════════
+function selectTeslimat(type){
+  window._teslimatType=type;
+  document.getElementById('m-teslim').classList.remove('open');
+  openCompleteModal();
+}
+
+// ═══════════════════════════════════
+//  MAPS
+// ═══════════════════════════════════
+function openImgFull(src){
+  const ov=document.createElement('div');
+  ov.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:zoom-out;';
+  const img=document.createElement('img');
+  img.src=src;
+  img.style.cssText='max-width:95vw;max-height:90vh;border-radius:10px;object-fit:contain;';
+  ov.appendChild(img);
+  ov.onclick=()=>ov.remove();
+  document.body.appendChild(ov);
+}
+function openMaps(addr){
+  const decoded=decodeURIComponent(addr);
+  window.open('https://maps.google.com/?q='+encodeURIComponent(decoded),'_blank');
+}
+
+// ═══════════════════════════════════
+//  PAYLAŞ (SHARE)
+// ═══════════════════════════════════
+function openShareModal(){
+  const nameEl=document.getElementById('share-name');
+  const phoneEl=document.getElementById('share-phone');
+  if(nameEl)nameEl.value='';
+  if(phoneEl)phoneEl.value='';
+  document.getElementById('m-share').classList.add('open');
+}
+function sendShareWA(){
+  const srv=state.currentSrv;if(!srv)return;
+  const name=(document.getElementById('share-name').value||'').trim();
+  const phone=(document.getElementById('share-phone').value||'').trim();
+  if(!phone){toast('⚠️ Teknisyen telefonu gerekli.');return;}
+  const s=state.settings;
+  const company=s.company||'Aras İklimlendirme';
+  const addr=[srv.customer.address,srv.customer.district,srv.customer.city].filter(Boolean).join(', ')||'—';
+  const msg='*'+company+'*\n_Servis Atama Bildirimi_\n\nSayın '+(name||'Teknisyen')+',\n\nAşağıdaki servis kaydı size atanmıştır:\n\n━━━━━━━━━━━━━━━━━━━━━━━━\n📋 *Servis No:* '+srv.id+'\n👤 *Müşteri:* '+srv.customer.name+'\n📞 *Tel:* '+(srv.customer.phone||'—')+'\n📍 *Adres:* '+addr+'\n📅 *Tarih:* '+fmtDate(srv.date)+'\n🕐 *Saat:* '+(srv.time||'—')+'\n❄️ *Cihaz:* '+(srv.device.brand||'')+' '+(srv.device.type||'')+'\n🔧 *İşlem:* '+(srv.fault.type||'—')+'\n📝 *Arıza:* '+(srv.fault.description||'—')+'\n━━━━━━━━━━━━━━━━━━━━━━━━\n\nİyi çalışmalar 👍';
+  let p=phone.replace(/[^0-9]/g,'');
+  if(p.startsWith('0'))p='90'+p.slice(1);else if(!p.startsWith('90'))p='90'+p;
+  document.getElementById('m-share').classList.remove('open');
+  window.open('https://wa.me/'+p+'?text='+encodeURIComponent(msg),'_blank');
+}
+
+// ═══════════════════════════════════
+//  BÖLÜM DÜZENLE (EDIT SECTION)
+// ═══════════════════════════════════
+window._editSectionId=null;
+window._editSectionType=null;
+function editSrvSection(section, srvId){
+  const srv=state.services.find(function(s){return s.id===srvId;});if(!srv)return;
+  window._editSectionId=srvId;
+  window._editSectionType=section;
+  const titleEl=document.getElementById('edit-section-title');
+  const bodyEl=document.getElementById('edit-section-body');
+  if(!titleEl||!bodyEl)return;
+  var title='',html='';
+  if(section==='customer'){
+    title='👤 Müşteri Bilgileri';
+    html='<div class="frow"><label>Ad Soyad</label><input id="es-cname" type="text" value="'+esc(srv.customer.name||'')+'"></div>'
+      +'<div class="frow"><label>Telefon</label><input id="es-cphone" type="tel" value="'+esc(srv.customer.phone||'')+'"></div>'
+      +'<div class="frow"><label>E-posta</label><input id="es-cemail" type="email" value="'+esc(srv.customer.email||'')+'"></div>'
+      +'<div class="frow"><label>Adres</label><input id="es-caddr" type="text" value="'+esc(srv.customer.address||'')+'"></div>'
+      +'<div class="frow"><label>İlçe</label><input id="es-cdistrict" type="text" value="'+esc(srv.customer.district||'')+'"></div>'
+      +'<div class="frow"><label>Şehir</label><input id="es-ccity" type="text" value="'+esc(srv.customer.city||'')+'"></div>';
+  } else if(section==='device'){
+    title='❄️ Cihaz Bilgileri';
+    var dtypes=['Duvar Tipi Split','Split Klima','Kaset Klima','Pencere Tipi Klima','Portatif Klima','Multi Split','Yer Tipi Klima','Paket Klima','VRF Sistemi','Chiller','Fan Coil','Isı Pompası'];
+    var brands=['Arçelik','Beko','Daikin','Fakir','General','Gree','Haier','Hantech','Hitachi','Jeriyan','LG','Midea','Mitsubishi','Samsung','Sigma','Toshiba','Vestel','Diğer'];
+    html='<div class="frow"><label>Cihaz Türü</label><select id="es-dtype">'+dtypes.map(function(t){return '<option'+(t===srv.device.type?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div>'
+      +'<div class="frow"><label>Marka</label><select id="es-dbrand">'+brands.map(function(b){return '<option'+(b===srv.device.brand?' selected':'')+'>'+b+'</option>';}).join('')+'</select></div>'
+      +'<div class="frow"><label>Kapasite</label><input id="es-dcap" type="text" value="'+esc(srv.device.capacity||'')+'"></div>';
+  } else if(section==='schedule'){
+    title='📅 Randevu';
+    html='<div class="frow"><label>Tarih</label><input id="es-date" type="date" value="'+(srv.date||'')+'"></div>'
+      +'<div class="frow"><label>Saat Aralığı</label><input id="es-time" type="text" value="'+esc(srv.time||'')+'"></div>'
+      +'<div class="frow"><label>Teknisyen</label><input id="es-tech" type="text" value="'+esc(srv.technician||'')+'"></div>';
+  } else if(section==='fault'){
+    title='🔍 Arıza & İşlem';
+    var ftypes=['Periyodik Bakım','Arıza Onarım','Gaz Dolumu','Montaj','Demontaj','Garanti Servisi'];
+    html='<div class="frow"><label>İşlem Türü</label><select id="es-ftype">'+ftypes.map(function(t){return '<option'+(t===srv.fault.type?' selected':'')+'>'+t+'</option>';}).join('')+'</select></div>'
+      +'<div class="frow"><label>Arıza Tanımı</label><textarea id="es-fdesc" style="width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 12px;font-size:13px;font-family:inherit;height:80px;resize:none;outline:none;">'+esc(srv.fault.description||'')+'</textarea></div>';
+  }
+  titleEl.textContent=title;
+  bodyEl.innerHTML=html;
+  document.getElementById('m-edit-section').classList.add('open');
+}
+function saveEditSection(){
+  var srvId=window._editSectionId;
+  var section=window._editSectionType;
+  if(!srvId||!section)return;
+  var idx=state.services.findIndex(function(s){return s.id===srvId;});if(idx===-1)return;
+  if(section==='customer'){
+    state.services[idx].customer.name=(document.getElementById('es-cname')&&document.getElementById('es-cname').value||'').trim();
+    state.services[idx].customer.phone=(document.getElementById('es-cphone')&&document.getElementById('es-cphone').value||'').trim();
+    state.services[idx].customer.email=(document.getElementById('es-cemail')&&document.getElementById('es-cemail').value||'').trim();
+    state.services[idx].customer.address=(document.getElementById('es-caddr')&&document.getElementById('es-caddr').value||'').trim();
+    state.services[idx].customer.district=(document.getElementById('es-cdistrict')&&document.getElementById('es-cdistrict').value||'').trim();
+    state.services[idx].customer.city=(document.getElementById('es-ccity')&&document.getElementById('es-ccity').value||'').trim();
+  } else if(section==='device'){
+    var dtEl=document.getElementById('es-dtype');if(dtEl)state.services[idx].device.type=dtEl.value;
+    var dbEl=document.getElementById('es-dbrand');if(dbEl)state.services[idx].device.brand=dbEl.value;
+    state.services[idx].device.capacity=(document.getElementById('es-dcap')&&document.getElementById('es-dcap').value||'').trim();
+  } else if(section==='schedule'){
+    state.services[idx].date=(document.getElementById('es-date')&&document.getElementById('es-date').value||'').trim();
+    state.services[idx].time=(document.getElementById('es-time')&&document.getElementById('es-time').value||'').trim();
+    state.services[idx].technician=(document.getElementById('es-tech')&&document.getElementById('es-tech').value||'').trim();
+  } else if(section==='fault'){
+    var ftEl=document.getElementById('es-ftype');if(ftEl)state.services[idx].fault.type=ftEl.value;
+    state.services[idx].fault.description=(document.getElementById('es-fdesc')&&document.getElementById('es-fdesc').value||'').trim();
+  }
+  DB.save('aras_srv',state.services);
+  state.currentSrv=state.services[idx];
+  document.getElementById('m-edit-section').classList.remove('open');
+  renderSrvDetail(state.currentSrv);
+  toast('✅ Bilgiler güncellendi!');
 }
 
 // ═══════════════════════════════════
